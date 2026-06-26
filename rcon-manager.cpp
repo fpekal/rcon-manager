@@ -5,8 +5,9 @@
 #include <unistd.h>
 
 #include "protocol.hpp"
+#include "server-entry.hpp"
 
-int main(int argc, char *argv[]) {
+int connect_to_server(const ServerEntry &entry) {
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
   sockaddr_in servaddr;
@@ -48,5 +49,33 @@ int main(int argc, char *argv[]) {
 
     auto response = get_packet(sockfd);
     std::cout << response.payload << std::endl;
+  }
+
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  auto entries = ServerEntry::load_entries_from_file("servers.txt");
+
+  if (argc <= 1) {
+    std::cout << "Available servers:\n";
+
+    for (auto &entry : entries) {
+      std::cout << entry.name << '\n';
+    }
+  } else if (argc == 2) {
+    std::string server_name = argv[1];
+
+    for (auto &entry : entries) {
+      if (entry.name == server_name) {
+        return connect_to_server(entry);
+      }
+    }
+
+    std::cerr << "Server not found" << std::endl;
+    return 2;
+  } else {
+    std::cerr << "Invalid arguments" << std::endl;
+    return 3;
   }
 }
