@@ -42,10 +42,16 @@ public:
       auto parts = line | std::views::split(':');
       auto parts_vec = std::ranges::to<std::vector<std::string>>(parts);
 
-      name = parts_vec[0];
-      address = parts_vec[1];
-      port = std::stoi(parts_vec[2]);
-      password = parts_vec[3];
+      try {
+        name = parts_vec.at(0);
+        address = parts_vec.at(1);
+        port = std::stoi(parts_vec.at(2));
+        password = parts_vec.at(3);
+      } catch (...) {
+        std::cerr << "Failed to parse server config file" << std::endl;
+        std::cerr << "Wrong line: " << line << std::endl;
+        exit(7);
+      }
 
       entries.emplace_back(name, address, password, port);
     }
