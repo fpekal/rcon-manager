@@ -34,11 +34,14 @@ int connect_to_server(const ServerEntry &entry) {
   };
 
   {
-    auto login = Packet::login("amogus");
+    auto login = Packet::login(entry.password);
     send_packet(sockfd, login);
 
     auto response = get_packet(sockfd);
-    std::cout << response.payload << std::endl;
+    if (login.id != response.id) {
+      std::cerr << "Login failed" << std::endl;
+      return 6;
+    }
   }
 
   while (true) {

@@ -10,6 +10,7 @@ class ServerEntry {
 public:
   std::string name;
   std::string address;
+  std::string password;
   int port;
 
   static std::vector<ServerEntry>
@@ -35,6 +36,7 @@ public:
 
       std::string name;
       std::string address;
+      std::string password;
       int port;
 
       auto parts = line | std::views::split(':');
@@ -43,8 +45,9 @@ public:
       name = parts_vec[0];
       address = parts_vec[1];
       port = std::stoi(parts_vec[2]);
+      password = parts_vec[3];
 
-      entries.emplace_back(name, address, port);
+      entries.emplace_back(name, address, password, port);
     }
     return entries;
   }
