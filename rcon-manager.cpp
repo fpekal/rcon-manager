@@ -15,9 +15,9 @@
 int connect_to_server(const ServerEntry &entry) {
   sockaddr_in servaddr;
   servaddr.sin_family = AF_INET;
-  servaddr.sin_port = htons(25575);
+  servaddr.sin_port = htons(entry.port);
 
-  inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
+  inet_pton(AF_INET, entry.address.c_str(), &servaddr.sin_addr);
 
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (connect(sockfd, reinterpret_cast<sockaddr *>(&servaddr),
