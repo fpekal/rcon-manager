@@ -67,3 +67,8 @@ Packet Packet::login(const std::string &password) {
 Packet Packet::command(const std::string &text) {
   return Packet(Packet::generate_id(), PacketType::COMMAND, text);
 }
+
+uint32_t Packet::generate_id() {
+  static uint32_t id = 0;
+  return id++;
+}

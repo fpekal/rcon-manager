@@ -28,8 +28,5 @@ public:
   static Packet command(const std::string &text);
 
 private:
-  static uint32_t generate_id() {
-    static uint32_t id = 0;
-    return id++;
-  }
+  static uint32_t generate_id();
 };
